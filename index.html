@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Recaptcha Test</title>
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=onCreateRecaptcha"></script>
+  <style>
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
+  
+    html {
+      font-family: sans-serif;
+      background-color: #EEEEEE;
+      padding: 20px;
+    }
+
+    body {
+      background-color: #FFFFFF;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+    }
+    
+    h1, h2, h3, h4, h5 {
+      margin-top: 0;
+    }
+    
+    #site-key-input {
+      font-family: monospace;
+      width: 350px;
+      max-width: 100%;
+    }
+    
+    input, button {
+      height: 30px;
+      margin: 5px 0px;
+    }
+    
+    p {
+      word-break: break-all;
+    }
+    
+    #recaptcha-container {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Recaptcha Test</h2>
+  <input id="site-key-input" type="text" placeholder="Recaptcha site key..." />
+  <button id="create-recaptcha-btn" title="Cria um Recaptcha com a site key fornecida">
+    Create Recaptcha
+  </button>
+  <button id="reset-recaptcha-btn" title="Desmarca o Recaptcha se estiver marcado">
+    Reset Recaptcha
+  </button>
+
+  <div id="recaptcha-container">
+    <div id="recaptcha"></div>
+  </div>
+  
+  <p><strong>Current site key:</strong> <code id="site-key"></code><p>
+  <p><strong>Challenge result:</strong> <br><code id="result"></code><p>
+  
+  <script>
+    const $ = x => document.querySelector(x);
+
+    const $siteKeyInput = $('#site-key-input');
+    const $createButton = $('#create-recaptcha-btn');
+    const $resetButton = $('#reset-recaptcha-btn');
+    const $siteKey = $('#site-key');
+    const $challengeResult = $('#result');
+    const $recaptchaContainer = $('#recaptcha-container');
+    
+    let recaptchaId = null;
+    $siteKeyInput.value = '6LeO-asUAAAAAMxkV76Rn1bNT0P_uy89CNnq3MmT';
+    
+    function onCreateRecaptcha() {
+      const siteKey = $siteKeyInput.value;
+      $siteKey.innerText = siteKey;
+      
+      $recaptchaContainer.innerHTML = '<div id="recaptcha"></div>';
+      
+      recaptchaId = grecaptcha.render('recaptcha', {
+        sitekey: siteKey,
+        callback: onRecaptchaVerify,
+      });
+    }
+    
+    function onRecaptchaVerify(result) {
+      $challengeResult.innerText=result;
+    }
+
+    $createButton.addEventListener('click', onCreateRecaptcha);
+    $resetButton.addEventListener('click', () => grecaptcha.reset(recaptchaId));
+  </script>
+</body>
+</html>
