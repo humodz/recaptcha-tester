@@ -5,7 +5,7 @@
   <title>Recaptcha Tester</title>
   <script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=onCreateRecaptcha"></script>
   <style>
-    *, *:before, *:after {
+    *, *::before, *::after {
       box-sizing: border-box;
     }
   
@@ -46,15 +46,20 @@
     #recaptcha-container {
       margin-top: 10px;
     }
+    
+    .footer-link {
+      display: block;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <h2>Recaptcha Tester</h2>
   <input id="site-key-input" type="text" placeholder="Recaptcha site key..." />
-  <button id="create-recaptcha-btn" title="Cria um Recaptcha com a site key fornecida">
+  <button id="create-recaptcha-btn" title="Create the Recaptcha element with the specified site key">
     Create Recaptcha
   </button>
-  <button id="reset-recaptcha-btn" title="Desmarca o Recaptcha se estiver marcado">
+  <button id="reset-recaptcha-btn" title="Unchecks the Recaptcha element">
     Reset Recaptcha
   </button>
 
@@ -64,6 +69,8 @@
   
   <p><strong>Current site key:</strong> <code id="site-key"></code><p>
   <p><strong>Challenge result:</strong> <br><code id="result"></code><p>
+  
+  <a class="footer-link" href="https://github.com/humodz/recaptcha-tester">GitHub Page</a>
   
   <script>
     const $ = x => document.querySelector(x);
@@ -93,9 +100,29 @@
     function onRecaptchaVerify(result) {
       $challengeResult.innerText=result;
     }
+    
+    $pasteButton.addEventListener('click', () => {
+      $siteKeyInput.value = '';
+      $siteKeyInput.focus();
+      document.execCommand('paste');
+    });
 
     $createButton.addEventListener('click', onCreateRecaptcha);
     $resetButton.addEventListener('click', () => grecaptcha.reset(recaptchaId));
+  </script>
+  
+  <script>
+    function httpGet(url) {
+      return new Promise((ok, fail) => {
+        const req = new XMLHttpRequest();
+        req.open('GET', url);
+        req.responseType = 'json';
+        req.onload = ok;
+        req.addEventListener('load', req.response);
+        req.addEventListener('error', fail);
+        req.send();
+      });
+    }
   </script>
 </body>
 </html>
