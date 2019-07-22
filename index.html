@@ -100,12 +100,6 @@
     function onRecaptchaVerify(result) {
       $challengeResult.innerText=result;
     }
-    
-    $pasteButton.addEventListener('click', () => {
-      $siteKeyInput.value = '';
-      $siteKeyInput.focus();
-      document.execCommand('paste');
-    });
 
     $createButton.addEventListener('click', onCreateRecaptcha);
     $resetButton.addEventListener('click', () => grecaptcha.reset(recaptchaId));
