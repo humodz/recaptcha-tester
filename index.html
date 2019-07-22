@@ -104,19 +104,5 @@
     $createButton.addEventListener('click', onCreateRecaptcha);
     $resetButton.addEventListener('click', () => grecaptcha.reset(recaptchaId));
   </script>
-  
-  <script>
-    function httpGet(url) {
-      return new Promise((ok, fail) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', url);
-        req.responseType = 'json';
-        req.onload = ok;
-        req.addEventListener('load', req.response);
-        req.addEventListener('error', fail);
-        req.send();
-      });
-    }
-  </script>
 </body>
 </html>
