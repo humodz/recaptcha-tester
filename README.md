@@ -4,7 +4,7 @@ A simple page that generates ReCaptcha V2 challenges, to test your backend.
 
 ## How to use
 
-- In your ReCaptcha's settings, add `humodz.github.io` to the allowed domain
+- In your ReCaptcha's settings, add `humodz.github.io` to the list of allowed domains
 - (Optional) if you want to generate lots of ReCaptcha challenges, reducing the ReCaptcha difficulty will make it faster.
 - Go to [](https://humodz.github.io/recaptcha-tester/), fill the text box with your **Site Key** (**NOT** your secret key), and press **Create ReCaptcha*
 - After you solve the ReCaptcha, the returned challenge string will appear in **Challenge result**
