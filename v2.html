@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello World</title>
+</head>
+<body>
+  <p>
+    <button onclick="generateToken()">Generate Token</button>
+  </p>
+  <p>
+    Result:
+  </p>
+  
+  <pre id="token">...</pre>
+
+  <script>
+    const resultElem = document.querySelector('#token');
+
+    const siteKey = '6LdqtwgcAAAAAAvk5IXCQhwJcIkhbZTW-d882i8k';
+
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js?render=' + siteKey;
+    document.body.append(script);
+
+    // https://developers.google.com/recaptcha/docs/v3#programmatically_invoke_the_challenge
+    async function generateToken() {
+      await new Promise(ok => grecaptcha.ready(ok));
+      const token = await grecaptcha.execute(siteKey, { action: 'submit' });
+      resultElem.textContent = token;
+    }
+</script>
+</body>
+</html>
