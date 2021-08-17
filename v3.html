@@ -3,33 +3,114 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello World</title>
+  <title>ReCaptcha v3 Tester</title>
 </head>
 <body>
   <p>
-    <button onclick="generateToken()">Generate Token</button>
+    Site key: <input id="site-key">
   </p>
   <p>
-    Result:
+    <button onclick="createRecaptcha()">Create</button>
+    <button onclick="resetRecaptcha()">Reset</button>
+    <button onclick="generateToken()">Generate Token</button>
   </p>
-  
-  <pre id="token">...</pre>
+
+  <p>
+    <strong>Current site key:</strong>
+    <span id="curr-site-key" class="mono"></span>
+  </p>
+
+  <p>
+    <strong>Result (click to copy):</strong>
+  </p>
+
+  <p
+    id="result"
+    class="mono"
+    onclick="copyResult()"
+  ></p>
+
+  <textarea id="clipboard"></textarea>
 
   <script>
-    const resultElem = document.querySelector('#token');
+    const $siteKey = document.querySelector('#site-key');
+    const $currSiteKey = document.querySelector('#curr-site-key');
+    const $result = document.querySelector('#result');
+    const $clipboard = document.querySelector('#clipboard');
 
-    const siteKey = '6LdqtwgcAAAAAAvk5IXCQhwJcIkhbZTW-d882i8k';
+    let siteKey = '6LdqtwgcAAAAAAvk5IXCQhwJcIkhbZTW-d882i8k';
+    $siteKey.value = siteKey;
 
-    const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js?render=' + siteKey;
-    document.body.append(script);
+    let resultToken;
 
-    // https://developers.google.com/recaptcha/docs/v3#programmatically_invoke_the_challenge
+    function createRecaptcha() {
+      siteKey = $siteKey.value;
+      resetRecaptcha();
+    }
+
+    function resetRecaptcha() {
+      $currSiteKey.textContent = siteKey;
+
+      const oldScript = document.querySelector('script.recaptcha-api');
+
+      if (oldScript) {
+        document.body.removeChild(oldScript);
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://www.google.com/recaptcha/api.js?render=' + siteKey;
+      script.classList.add = 'recaptcha-api';
+      document.body.append(script);
+
+      $result.textContent = '(press Generate Token)';
+    }
+
+    // https://developers.google.com/recaptcha/docs/v3
     async function generateToken() {
       await new Promise(ok => grecaptcha.ready(ok));
-      const token = await grecaptcha.execute(siteKey, { action: 'submit' });
-      resultElem.textContent = token;
+      resultToken = await grecaptcha.execute(siteKey, { action: 'submit' });
+      $result.textContent = resultToken;
     }
-</script>
+
+    function copyResult() {
+      $clipboard.value = resultToken;
+
+      $clipboard.focus();
+      $clipboard.select();
+      document.execCommand('copy');
+    }
+
+    resetRecaptcha();
+  </script>
+
+  <style>
+    html {
+      font-family: sans-serif;
+      box-sizing: border-box;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
+    input {
+      width: 400px;
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+    textarea {
+      position: fixed;
+      top: -1000px;
+      left: -1000px;
+    }
+
+    #result {
+      max-width: 600px;
+      line-break: anywhere;
+    }
+  </style>
 </body>
 </html>
