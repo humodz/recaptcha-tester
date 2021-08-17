@@ -17,7 +17,7 @@
 
   <p>
     <strong>Current site key:</strong>
-    <span id="curr-site-key" class="mono"></span>
+    <span id="curr-site-key" class="mono">(press create)</span>
   </p>
 
   <p>
@@ -45,12 +45,11 @@
 
     function createRecaptcha() {
       siteKey = $siteKey.value;
+      $currSiteKey.textContent = siteKey;
       resetRecaptcha();
     }
 
     function resetRecaptcha() {
-      $currSiteKey.textContent = siteKey;
-
       const oldScript = document.querySelector('script.recaptcha-api');
 
       if (oldScript) {
@@ -79,8 +78,6 @@
       $clipboard.select();
       document.execCommand('copy');
     }
-
-    resetRecaptcha();
   </script>
 
   <style>
