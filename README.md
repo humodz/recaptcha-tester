@@ -37,5 +37,5 @@ function validateRecaptcha(challengeResult) {
 }
 
 // Usage:
-const isValid = await validateRecatpcha('03AGdBq25btArIsqz0ES7NLHisR7GiM0On... (truncated)');
+const isValid = await validateRecatpcha('03AGdBq25btArIsqz0ES7NLHisR7GiM0On... (the result from recaptcha-tester)');
 ```
